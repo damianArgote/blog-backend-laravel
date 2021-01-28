@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PostController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,9 +19,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('categories',[CategoryController::class,'index']);
-Route::get('categories/{id}',[CategoryController::class,'show']);
-Route::post('categories',[CategoryController::class,'store']);
-Route::put('categories/{id}',[CategoryController::class,'update']);
-Route::delete('categories/{id}',[CategoryController::class,'destroy']);
-//Route::post('categories/restore/{id}',[CategoryController::class,'recovery']);
+/**Categories */
+Route::resource('categories', 'CategoryController');
+//Route::resource('categories/{id}', 'CategoryController');
+
+/**Posts */
+Route::resource('posts', 'PostController');
+//Route::resource('posts/{id}', 'PostController');

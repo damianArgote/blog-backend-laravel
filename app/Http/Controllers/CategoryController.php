@@ -52,7 +52,7 @@ class CategoryController extends Controller
         $result = $category;
 
         if($result){
-            return [$result];
+            return $result;
         }else{
             return ['Result' => 'El registro no existe'];
         }
