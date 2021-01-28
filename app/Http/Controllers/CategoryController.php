@@ -15,17 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-        return view('categories.create');
+        return Category::all();
     }
 
     /**
@@ -37,16 +27,16 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
-            'name'=>'required'
-        ]);
+        $category = new Category;
+        $category->name=$request->name;
+        $result = $category->save();
 
-        $category = new Category([
-            'name' => $request->get('name')
-        ]);
-
-        $category->save();
-        return redirect('/categories')->with('success', 'Category saved!');
+        if($result){
+            return ['Result' => 'Datos recibidos'];
+        }else{
+            return ['Result' => 'Error en la creacion'];
+        }
+        
     }
 
     /**
@@ -58,17 +48,14 @@ class CategoryController extends Controller
     public function show($id)
     {
         //
-    }
+        $category = Category::find($id);
+        $result = $category;
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        if($result){
+            return [$result];
+        }else{
+            return ['Result' => 'El registro no existe'];
+        }
     }
 
     /**
@@ -81,6 +68,15 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $category = Category::find($id);
+        $category->name = $request->name;
+
+        $result=$category->save();
+        if($result){
+            return ['Result' => 'Datos actualizados'];
+        }else{
+            return ['Result' => 'Error en la actualizacion'];
+        }
     }
 
     /**
@@ -92,5 +88,27 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+        $category = Category::find($id);
+
+        $result = $category->delete();
+
+        if($result){
+            return ['Result' => 'Registro eliminado!'];
+        }else{
+            return ['Result' => 'Error al eliminar el registro'];
+        }
+    }
+
+    public function recovery($id){
+
+        $category = Category::withTrashed()->where('id',$id)->get();
+        
+        $result = $category->restore();
+
+        if($result){
+            return ['Result' => 'Registro recuperado!'];
+        }else{
+            return ['Result' => 'Error  al recuperar'];
+        }
     }
 }
